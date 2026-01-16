@@ -1,0 +1,7 @@
+docker compose down
+docker compose up -d
+
+docker logs -f grafana  (log fica rodando)
+
+docker compose restart prometheus
+docker compose restart grafana  (qunado altera o alerts.yml)

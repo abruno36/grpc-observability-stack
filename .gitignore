@@ -1,0 +1,15 @@
+# .NET
+bin/
+obj/
+
+# Logs
+logs/
+*.log
+
+# Docker
+**/grafana-data/
+
+# IDE
+.vscode/
+.idea/
+*.user

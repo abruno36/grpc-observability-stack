@@ -1,0 +1,119 @@
+apiVersion: 1
+
+groups:
+  - name: grpc-errors
+    folder: "gRPC / Errors"
+    interval: 1m
+
+    rules:
+      # =========================
+      # WARNING — erro recorrente
+      # =========================
+      - uid: grpc-errors-warning
+        title: "gRPC — Errors detected (warning)"
+        condition: C
+
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 300
+              to: 0
+            model:
+              expr: sum(increase(grpc_requests_errors_total[5m]))
+              format: time_series
+
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              type: reduce
+              expression: A
+              reducer: last
+
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: B
+              conditions:
+                - type: query
+                  evaluator:
+                    type: gt
+                    params: [3]
+                  reducer:
+                    type: last
+                  operator:
+                    type: and
+
+        for: 1m
+        annotations:
+          summary: "gRPC service returning errors (warning)"
+          description: >
+            The gRPC service "grpc-server" is returning recurring errors.
+
+            Errors observed in the last 5 minutes exceed the warning threshold.
+
+            Action:
+            - Monitor error trends
+            - Check recent changes or dependency health
+        labels:
+          service: grpc-server
+          severity: warning
+          signal: errors
+
+      # =========================
+      # CRITICAL — incidente real
+      # =========================
+      - uid: grpc-errors-critical
+        title: "gRPC — Errors detected (critical)"
+        condition: C
+
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 300
+              to: 0
+            model:
+              expr: sum(increase(grpc_requests_errors_total[5m]))
+              format: time_series
+
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              type: reduce
+              expression: A
+              reducer: last
+
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: B
+              conditions:
+                - type: query
+                  evaluator:
+                    type: gt
+                    params: [10]
+                  reducer:
+                    type: last
+                  operator:
+                    type: and
+
+        for: 2m
+        annotations:
+          summary: "gRPC service experiencing sustained errors (CRITICAL)"
+          description: >
+            The gRPC service "grpc-server" is experiencing sustained Internal errors.
+
+            Error volume exceeded the critical threshold for more than 2 minutes,
+            indicating a likely service incident.
+
+            Action:
+            - Open the "gRPC Errors — Detailed Analysis" dashboard
+            - Investigate recent deployments
+            - Validate downstream dependencies
+        labels:
+          service: grpc-server
+          severity: critical
+          signal: errors
