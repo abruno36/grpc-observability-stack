@@ -210,3 +210,22 @@ Este projeto demonstra conhecimento prático em:
 ## 🏁 Conclusão
 
 Este repositório funciona como um **mini laboratório de observabilidade gRPC**, pronto para ser usado como **showcase técnico**, onboarding ou demonstração em entrevistas.
+
+### 🧪 Como testar o projeto (passo a passo)
+
+Este projeto foi pensado para ser executado e validado por qualquer pessoa
+em poucos minutos.
+
+#### Pré-requisitos
+- Docker
+- Docker Compose
+- .NET 8 SDK (apenas para rodar o gerador de carga)
+
+---
+
+#### 1️⃣ Subir a stack de observabilidade
+
+Na raiz do repositório, execute:
+
+```bash
+docker compose up -d
