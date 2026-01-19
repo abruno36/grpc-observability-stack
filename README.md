@@ -169,7 +169,10 @@ Acessos:
 
 ---
 
-### Rodar o gerador de carga
+### Rodar o gRPCServer e o gerador de carga GrpcLoadClient ou rodar pelo Visual Studio
+```bash
+dotnet run --project GrpcServer
+
 ```bash
 dotnet run --project GrpcLoadClient
 ```
